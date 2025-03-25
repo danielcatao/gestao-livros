@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Livros</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Gestão de Livros</h1>
+
+    <!-- Formulário para adicionar/atualizar -->
+    <form th:action="@{/}" th:object="${livro}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div>
+            <label>Título:</label>
+            <input type="text" th:field="*{titulo}" required />
+        </div>
+        <div>
+            <label>Autor:</label>
+            <input type="text" th:field="*{autor}" required />
+        </div>
+        <div>
+            <label>Editora:</label>
+            <input type="text" th:field="*{editora}" />
+        </div>
+        <div>
+            <label>Gênero:</label>
+            <input type="text" th:field="*{genero}" />
+        </div>
+        <button type="submit">Salvar</button>
+        <button type="button" onclick="limparFormulario()">Novo</button>
+    </form>
+
+    <!-- Tabela de livros -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Editora</th>
+            <th>Gênero</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="livro : ${livros}">
+            <td th:text="${livro.id}"></td>
+            <td th:text="${livro.titulo}"></td>
+            <td th:text="${livro.autor}"></td>
+            <td th:text="${livro.editora}"></td>
+            <td th:text="${livro.genero}"></td>
+            <td>
+                <button th:onclick="'editar(' + ${livro.id} + ')'">Editar</button>
+                <form th:action="@{/delete/{id}(id=${livro.id})}" method="post" style="display:inline;">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function editar(id) {
+        window.location.href = '/edit/' + id;
+    }
+
+    function limparFormulario() {
+        document.querySelector('form').reset();
+        document.querySelector('input[name="id"]').value = '';
+    }
+</script>
+</body>
+</html>
